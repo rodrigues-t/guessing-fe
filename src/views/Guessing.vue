@@ -2,7 +2,6 @@
   <b-row>
     <b-col cols="12" md="4" offset-md="4">
       <start-form
-        :disableStart="isLoadingMovies"
         @start-game-event="startEvent"
       />
     </b-col>
@@ -12,8 +11,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import StartForm from "@/modules/game/components/StartForm.vue";
-import MovieService from "@/modules/game/services/MovieService";
-import Movie from "@/modules/game/models/Movie";
+import GameStore from "@/modules/game/store";
 
 @Component({
   components: {
@@ -21,11 +19,25 @@ import Movie from "@/modules/game/models/Movie";
   },
 })
 export default class Guessing extends Vue {
-  private isLoadingMovies = false;
 
-  async getMovies(searchTerm: string): Promise<Array<Movie>> {
-    const response = await new MovieService().getMoviesBySearchTerm(searchTerm);
-    return response.data;
+  constructor() {
+    super();
+    GameStore.reset();
+  }
+  
+  async startEvent(form: any): Promise<void> {
+    try {
+      await GameStore.getMovies(form.searchTerm);
+      this.setUpGame(form.userName, form.searchTerm);
+      this.$router.push('/game');
+    } catch (e) {
+      this.handleError(e);
+    }
+  }
+
+  setUpGame(userName: string, searchTerm: string): void {
+    GameStore.setUserName(userName);
+    GameStore.setSearchTerm(searchTerm);
   }
 
   handleError(response: any): void {
@@ -41,18 +53,6 @@ export default class Guessing extends Vue {
       variant,
       autoHideDelay: 5000,
     });
-  }
-
-  async startEvent(form: any): Promise<void> {
-    this.isLoadingMovies = true;
-    try {
-      const movies: Array<Movie> = await this.getMovies(form.searchTerm);
-      console.log(movies);
-    } catch (e) {
-      this.handleError(e.response);
-    } finally {
-      this.isLoadingMovies = false;
-    }
   }
 }
 </script>

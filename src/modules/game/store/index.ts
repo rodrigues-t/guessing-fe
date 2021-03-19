@@ -14,7 +14,8 @@ class GameStore extends VuexModule {
     public searchTerm: string | null = null;
     public movies: Array<Movie> | null = null;
     public moviesLoading = false;
-    
+    public score: number | null = null;
+
     // Mutations
 
     @Mutation
@@ -32,9 +33,20 @@ class GameStore extends VuexModule {
         this.movies = movies;
     }
 
-    @Mutation 
+    @Mutation
+    public UPDATE_MOVIE(movie: Movie): void {
+        const m = this.movies?.find((m: Movie) => m.imdbID === movie.imdbID);
+        Object.assign(m, movie);
+    }
+
+    @Mutation
     public SET_MOVIES_LOADING(isLoading: boolean): void {
         this.moviesLoading = isLoading;
+    }
+
+    @Mutation
+    public SET_SCORE(score: number): void {
+        this.score = score;
     }
 
     // Actions
@@ -49,7 +61,7 @@ class GameStore extends VuexModule {
         this.context.commit('SET_SEARCH_TERM', searchTerm);
     }
 
-    @Action({rawError: true})
+    @Action({ rawError: true })
     async getMovies(searchTerm: string): Promise<any> {
         try {
             this.context.commit('SET_MOVIES_LOADING', true);
@@ -63,8 +75,28 @@ class GameStore extends VuexModule {
         }
     }
 
-    @Action setMovies(movies: Array<Movie>): void {
+    @Action 
+    setMovies(movies: Array<Movie>): void {
         this.context.commit('SET_MOVIES', movies);
+    }
+
+    @Action 
+    updateMovie(movie: Movie): void {
+        this.context.commit('UPDATE_MOVIE', movie);
+    }
+
+    @Action 
+    setScore(score: number): void {
+        this.context.commit('SET_SCORE', score);
+    }
+
+    @Action
+    reset(): void {
+        this.context.commit('SET_USER_NAME', null);
+        this.context.commit('SET_SEARCH_TERM', null);
+        this.context.commit('SET_MOVIES', null);
+        this.context.commit('SET_MOVIES_LOADING', false);
+        this.context.commit('SET_SCORE', null);
     }
 }
 

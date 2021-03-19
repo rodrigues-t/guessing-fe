@@ -8,6 +8,13 @@ export abstract class Api {
         return await axios.get(`${this.baseUrl}${route}`, {
             params: params ? params : null,
             headers: headers ? headers : null,
-        })
+        });
+    }
+
+    protected async post(route: string, data: unknown, params?: unknown, headers?: unknown): Promise<any> {
+        return await axios.post(`${this.baseUrl}${route}`, data, {
+            params: params ? params : null,
+            headers: headers ? headers : null,
+        });
     }
 }
