@@ -52,11 +52,11 @@
             </b-form-invalid-feedback>
           </ValidationProvider>
         </b-form-group>
-        <b-button variant="dark" block @click="start" :disabled="disableStart">
+        <b-button variant="dark" block @click="start" :disabled="moviesLoading">
           <b-icon
             icon="circle-fill"
             animation="throb"
-            v-show="disableStart"
+            v-show="moviesLoading"
           ></b-icon>
           {{ startText }}
         </b-button>
@@ -69,6 +69,7 @@
 import { Component, Vue, Emit, Prop } from "vue-property-decorator";
 import { extend, ValidationProvider, ValidationObserver } from "vee-validate";
 import { required, min, max } from "vee-validate/dist/rules";
+import GameStore from "@/modules/game/store";
 
 extend("required", { ...required, message: "{_field_} is required" });
 extend("min", {
@@ -87,8 +88,6 @@ extend("max", {
   },
 })
 export default class StartForm extends Vue {
-  @Prop({ default: false }) readonly disableStart!: boolean;
-
   private searchTerm: string;
   private userName: string;
 
@@ -97,9 +96,13 @@ export default class StartForm extends Vue {
     this.searchTerm = "";
     this.userName = "";
   }
+  
+  get moviesLoading() {
+      return GameStore.moviesLoading;
+  }
 
   get startText() {
-    return this.disableStart ? " " : "Start";
+    return this.moviesLoading ? " " : "Start";
   }
 
   @Emit("start-game-event")
