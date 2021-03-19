@@ -66,7 +66,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Emit, Prop } from "vue-property-decorator";
+import { Component, Vue, Emit } from "vue-property-decorator";
 import { extend, ValidationProvider, ValidationObserver } from "vee-validate";
 import { required, min, max } from "vee-validate/dist/rules";
 import GameStore from "@/modules/game/store";
