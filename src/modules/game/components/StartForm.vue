@@ -52,7 +52,14 @@
             </b-form-invalid-feedback>
           </ValidationProvider>
         </b-form-group>
-        <b-button variant="dark" block @click="start" :disabled="disableStart">Start</b-button>
+        <b-button variant="dark" block @click="start" :disabled="disableStart">
+          <b-icon
+            icon="circle-fill"
+            animation="throb"
+            v-show="disableStart"
+          ></b-icon>
+          {{ startText }}
+        </b-button>
       </b-form>
     </ValidationObserver>
   </b-card>
@@ -80,7 +87,7 @@ extend("max", {
   },
 })
 export default class StartForm extends Vue {
-  @Prop({default: false}) readonly disableStart!: boolean;
+  @Prop({ default: false }) readonly disableStart!: boolean;
 
   private searchTerm: string;
   private userName: string;
@@ -89,6 +96,10 @@ export default class StartForm extends Vue {
     super();
     this.searchTerm = "";
     this.userName = "";
+  }
+
+  get startText() {
+    return this.disableStart ? " " : "Start";
   }
 
   @Emit("start-game-event")
