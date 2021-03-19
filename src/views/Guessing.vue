@@ -9,6 +9,8 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import StartForm from "@/modules/game/components/StartForm.vue";
+import MovieService from "@/modules/game/services/MovieService";
+import Movie from "@/modules/game/models/Movie";
 
 @Component({
     components: {
@@ -19,9 +21,22 @@ export default class Guessing extends Vue {
 
     private isLoadingMovies = false;
 
-    startEvent(form: unknown): void {
-        console.log('start!', form);
-        //this.isLoadingMovies = true;
+    async getMovies(searchTerm: string): Promise<Array<Movie>> {
+        const response = await new MovieService().getMoviesBySearchTerm(searchTerm);
+        return response.data;
+
+    }
+
+    async startEvent(form: any): Promise<void> {
+        this.isLoadingMovies = true;
+        try {
+            const movies: Array<Movie> =  await this.getMovies(form.searchTerm);
+            console.log(movies);
+        } catch(e) {
+            console.log(e);
+        } finally {
+            this.isLoadingMovies = false;
+        }
     }
 }
 </script>
