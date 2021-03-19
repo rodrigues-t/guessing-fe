@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex flex-column text-center mt-2">
-    <span class="title mb-2">{{ movie.title }}{{movie.imdbRating}}</span>
+    <span class="title mb-2">{{ movie.title }}</span>
     <b-row>
       <b-col cols="12" md="4" offset-md="4"  xl="2" offset-xl="5">
         <b-img-lazy rounded fluid :src="movie.poster" />
@@ -61,7 +61,7 @@ extend("between", {
 export default class MovieGuessing extends Vue {
   @Prop({ required: true }) public movie!: Movie;
 
-  public rate = 0;
+  public rate = 5;
 
   @Emit('user-guess-event')
   userGuess(): number {

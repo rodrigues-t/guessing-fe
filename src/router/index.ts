@@ -20,6 +20,11 @@ const routes: Array<RouteConfig> = [
     name: 'Result',
     component: () => import('@/views/Result.vue')
   },
+  {
+    path: '/results',
+    name: 'Results',
+    component: () => import('@/views/Records.vue')
+  },
 ]
 
 const router = new VueRouter({

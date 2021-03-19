@@ -32,6 +32,7 @@
 import { Vue, Component } from "vue-property-decorator";
 import GameStore from "@/modules/game/store";
 import MovieService from "@/modules/game/services/MovieService";
+import ResultService from "@/modules/game/services/ResultService";
 import Movie from "@/modules/game/models/Movie";
 import MovieGuessing from "@/modules/game/components/MovieGuessing.vue";
 import Rules from "@/modules/game/rules";
@@ -54,7 +55,7 @@ export default class Game extends Vue {
     }
   }
 
-  created() {
+  created(): void {
     if (this.movies !== null) {
       this.getCurrentMovie();
     }
@@ -88,15 +89,15 @@ export default class Game extends Vue {
     }
   }
 
-  postResult() {
-      new MovieService().postResult({
+  postResult(): void {
+      new ResultService().postResult({
           score: GameStore.score!,
           userName: GameStore.userName!,
           searchTerm: GameStore.searchTerm!,
       })
   }
 
-  userGuessEvent(rate: number) {
+  userGuessEvent(rate: number): void {
     const isCorrect = new Rules().isRateCorrected(
       rate,
       this.currentMovie!.imdbRating!
@@ -116,7 +117,7 @@ export default class Game extends Vue {
     }
   }
 
-  endGame() {
+  endGame(): void {
     const score = this.getFinalScore();
     GameStore.setScore(score);
     this.postResult();
@@ -133,7 +134,7 @@ export default class Game extends Vue {
     }, 0);
   }
 
-  displayToast(title: string, text: string, variant: string) {
+  displayToast(title: string, text: string, variant: string): void {
     this.$bvToast.toast(text, {
       title: title,
       variant: variant,

@@ -11,7 +11,7 @@
     </b-col>
   </b-row>
 </template>
-<script>
+<script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import GameStore from "@/modules/game/store";
 
@@ -24,19 +24,19 @@ export default class Result extends Vue {
     }
   }
 
-  get score() {
+  get score(): number | null {
     return GameStore.score;
   }
 
-  get moviesCount() {
+  get moviesCount(): number | null {
     return GameStore.movies?.length ?? 0;
   }
 
-  get successPercent() {
-    return (this.score / this.moviesCount) * 100;
+  get successPercent(): number {
+    return (this.score! / this.moviesCount!) * 100;
   }
 
-  startAgain() {
+  startAgain(): void {
       this.$router.push('/');
       GameStore.reset();
   }
