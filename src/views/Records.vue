@@ -5,6 +5,7 @@
       <b-col cols="12" class="text-center">
         <b-card v-if="results">
           <b-table
+            id="results-table"          
             striped
             hover
             :items="results"
@@ -12,7 +13,12 @@
             :sort-by.sync="sortBy"
             :sort-desc.sync="sortDesc"
             responsive="sm"
+            show-empty
+            :empty-text="'No results yet.'"
           >
+            <template #empty="scope">
+              <h5>{{ scope.emptyText }}</h5>
+            </template>
             <template #cell(created_at)="data">
               {{ new Date(data.value).toDateString() }}
             </template>
@@ -41,11 +47,11 @@ export default class Records extends Vue {
   public sortDesc = true;
 
   public fields = [
-          { key: 'userName', sortable: true },
-          { key: 'searchTerm', sortable: true },
-          { key: 'created_at', sortable: true },
-          { key: 'score', sortable: true }
-        ];
+    { key: "userName", sortable: true },
+    { key: "searchTerm", sortable: true },
+    { key: "created_at", sortable: true },
+    { key: "score", sortable: true },
+  ];
 
   created(): void {
     this.getResults();
