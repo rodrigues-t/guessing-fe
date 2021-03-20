@@ -28,17 +28,18 @@ export default class Result extends Vue {
     return GameStore.score;
   }
 
-  get moviesCount(): number | null {
+  get moviesCount(): number {
     return GameStore.movies?.length ?? 0;
   }
 
   get successPercent(): number {
-    return (this.score! / this.moviesCount!) * 100;
+    if (this.moviesCount === 0) return 0;
+    return (this.score ?? 0 / this.moviesCount) * 100;
   }
 
   startAgain(): void {
-      this.$router.push('/');
-      GameStore.reset();
+    this.$router.push("/");
+    GameStore.reset();
   }
 }
 </script>

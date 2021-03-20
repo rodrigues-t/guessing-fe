@@ -1,0 +1,24 @@
+$min-slide-opacity: 0;
+$max-slide-opacity: 1;
+
+
+.slide-leave-active ,
+.slide-enter-active {
+  transition: all 0.7s;
+}
+
+.slide-leave-active {
+  opacity: $min-slide-opacity;
+}
+
+.slide-enter-to {
+  opacity: $max-slide-opacity;
+}
+
+.slide-enter {
+  transform: translateX(100%);
+  opacity: $min-slide-opacity;
+}
+.slide-leave-to {
+  transform: translateX(-100%);
+}

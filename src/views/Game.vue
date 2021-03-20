@@ -7,24 +7,26 @@
           <div class="step">
             {{
               `Movie ${currentMovieIndex + 1} out of 
-              ${movies ? movies.length : ""}`
+              ${movies ? movies.length : ""}`               
             }}
+            <b-icon v-if="isLoading" icon="arrow-clockwise" animation="spin"></b-icon>
           </div>
         </b-card>
       </b-col>
     </b-row>
-    <div class="loading" v-if="isLoading">
-      <b-icon icon="circle-fill" animation="throb" font-scale="5"></b-icon>
-    </div>
-    <b-row v-else>
-      <b-col cols="12">
-        <movie-guessing
-          v-if="currentMovie"
-          :movie="currentMovie"
-          @user-guess-event="userGuessEvent"
-        />
-      </b-col>
-    </b-row>
+    <transition name="slide" mode="out-in">
+      <div v-if="!isLoading" key="movie">
+        <b-row>
+          <b-col cols="12">
+            <movie-guessing
+              v-if="currentMovie"
+              :movie="currentMovie"
+              @user-guess-event="userGuessEvent"
+            />
+          </b-col>
+        </b-row>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -90,11 +92,11 @@ export default class Game extends Vue {
   }
 
   postResult(): void {
-      new ResultService().postResult({
-          score: GameStore.score!,
-          userName: GameStore.userName!,
-          searchTerm: GameStore.searchTerm!,
-      })
+    new ResultService().postResult({
+      score: GameStore.score!,
+      userName: GameStore.userName!,
+      searchTerm: GameStore.searchTerm!,
+    });
   }
 
   userGuessEvent(rate: number): void {
@@ -151,7 +153,9 @@ export default class Game extends Vue {
   }
 }
 </script>
-<style scoped>
+<style lang="scss"  scoped>
+@import "../config/styles/slide.scss";
+
 div.loading {
   display: flex;
   flex-direction: column;

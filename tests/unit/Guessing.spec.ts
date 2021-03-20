@@ -13,7 +13,7 @@ describe('Guessing View Tests', () => {
   })
 
   it("start event not called", async () => {
-    let startEvent = jest.fn();
+    const startEvent = jest.fn();
     const wrapper = mount(Guessing, {
       methods: {
         startEvent
@@ -27,7 +27,7 @@ describe('Guessing View Tests', () => {
   })
 
   it("start event called", async () => {
-    let startEvent = jest.fn();
+    const startEvent = jest.fn();
     const wrapper = mount(Guessing, {
       methods: {
         startEvent
