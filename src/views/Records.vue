@@ -26,6 +26,14 @@
         </b-card>
       </b-col>
     </b-row>
+    <b-modal
+      id="modalError"
+      title="Something wrong heppened"
+      v-model="showModalError"
+      @ok="closeModalError"
+    >
+      <p>Your result could not be save. Please try play again. =(</p>
+    </b-modal>
   </div>
 </template>
 
@@ -43,9 +51,10 @@ import { Vue, Component } from "vue-property-decorator";
 export default class Records extends Vue {
   public results: Array<GameResult> | null = null;
   public isLoading = true;
+  public showModalError = false;
   public sortBy = "score";
   public sortDesc = true;
-  
+
   public fields = [
     { key: "userName", sortable: true },
     { key: "searchTerm", sortable: true },
@@ -56,14 +65,19 @@ export default class Records extends Vue {
   created(): void {
     this.getResults();
   }
-    
+
+  closeModalError(): void {
+    this.showModalError = false;
+    this.getResults();
+  }
+
   async getResults(): Promise<void> {
     try {
       this.isLoading = true;
       const response = await new ResultService().getResults();
       this.results = response.data;
     } catch (e) {
-      console.log(e);
+      this.showModalError = true;
     } finally {
       this.isLoading = false;
     }

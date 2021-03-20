@@ -7,9 +7,13 @@
           <div class="step">
             {{
               `Movie ${currentMovieIndex + 1} out of 
-              ${movies ? movies.length : ""}`               
+              ${movies ? movies.length : ""}`
             }}
-            <b-icon v-if="isLoading" icon="arrow-clockwise" animation="spin"></b-icon>
+            <b-icon
+              v-if="isLoading"
+              icon="arrow-clockwise"
+              animation="spin"
+            ></b-icon>
           </div>
         </b-card>
       </b-col>
@@ -27,6 +31,16 @@
         </b-row>
       </div>
     </transition>
+    <b-modal
+      id="modalError"
+      title="Something wrong heppened"
+      v-model="showModalError"
+      ok-only
+      @ok="closeModalError"
+      ok-variant="danger"
+    >
+      <p>{{errorMessage}}</p>
+    </b-modal>
   </div>
 </template>
 
@@ -49,6 +63,8 @@ export default class Game extends Vue {
   public currentMovieIndex = 0;
   public currentMovie: Movie | null = null;
   public guessingRates = new Map<string, number>();
+  public showModalError = false;
+  public errorMessage = "";
 
   constructor() {
     super();
@@ -84,19 +100,24 @@ export default class Game extends Vue {
       this.currentMovie = response.data;
       GameStore.updateMovie(response.data);
     } catch (e) {
-      // Modal...
-      console.log(e);
+      this.setUpError(true, "Sorry! We could not find the movie. Please try to play again. =(")
     } finally {
       this.isLoading = false;
     }
   }
 
-  postResult(): void {
-    new ResultService().postResult({
-      score: GameStore.score!,
-      userName: GameStore.userName!,
-      searchTerm: GameStore.searchTerm!,
-    });
+  async postResult(): Promise<boolean> {
+    try {
+      await new ResultService().postResult({
+        score: GameStore.score!,
+        userName: GameStore.userName!,
+        searchTerm: GameStore.searchTerm!,
+      });
+      return true;
+    } catch (e) {
+      this.setUpError(true, "Your result could not be saved. Please try to play again. =(")
+      return false;
+    }
   }
 
   userGuessEvent(rate: number): void {
@@ -119,11 +140,12 @@ export default class Game extends Vue {
     }
   }
 
-  endGame(): void {
+  async endGame(): Promise<void> {
     const score = this.getFinalScore();
     GameStore.setScore(score);
-    this.postResult();
-    this.$router.push("/result");
+    if (await this.postResult()) {
+      this.$router.push("/result");
+    }
   }
 
   getFinalScore(): number {
@@ -150,6 +172,16 @@ export default class Game extends Vue {
 
   displayDanger(title: string, text: string): void {
     this.displayToast(title, text, "danger");
+  }
+
+  setUpError(show: boolean, message: string): void {
+    this.showModalError = show;
+    this.errorMessage = message;
+  }
+
+  closeModalError(): void {
+    this.showModalError = false;
+    this.$router.push("/");
   }
 }
 </script>
