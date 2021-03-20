@@ -5,7 +5,7 @@
       <b-col cols="12" class="text-center">
         <b-card v-if="results">
           <b-table
-            id="results-table"          
+            id="results-table"
             striped
             hover
             :items="results"
@@ -33,7 +33,7 @@
 import GameResult from "@/modules/game/models/GameResult";
 import ResultService from "@/modules/game/services/ResultService";
 import PageLoad from "@/modules/game/components/PageLoad.vue";
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Watch } from "vue-property-decorator";
 
 @Component({
   components: {
@@ -45,7 +45,7 @@ export default class Records extends Vue {
   public isLoading = true;
   public sortBy = "score";
   public sortDesc = true;
-
+  
   public fields = [
     { key: "userName", sortable: true },
     { key: "searchTerm", sortable: true },
@@ -56,7 +56,7 @@ export default class Records extends Vue {
   created(): void {
     this.getResults();
   }
-
+    
   async getResults(): Promise<void> {
     try {
       this.isLoading = true;
