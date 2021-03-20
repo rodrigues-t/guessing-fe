@@ -97,11 +97,11 @@ export default class StartForm extends Vue {
     this.userName = "";
   }
   
-  get moviesLoading() {
+  get moviesLoading(): boolean {
       return GameStore.moviesLoading;
   }
 
-  get startText() {
+  get startText(): string {
     return this.moviesLoading ? " " : "Start";
   }
 

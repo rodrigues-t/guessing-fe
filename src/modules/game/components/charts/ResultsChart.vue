@@ -36,8 +36,8 @@ export default class ResultsChart extends Vue {
     const uniqueValues = new Set<number>(this.results.map((r) => r.score));
     Array.from(uniqueValues).forEach((uv) => {
       const quant = this.results
-        .filter((r) => r.score === uv)
-        .reduce((acc: number, current: GameResult) => acc + 1, 0);
+        .filter((r) => r.score === uv).length;
+        //.reduce((acc: number, current: GameResult) => acc + 1, 0);
       this.labels.push(uv.toString() + " hits");
       this.data.push(quant);
     });

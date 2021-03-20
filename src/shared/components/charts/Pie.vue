@@ -19,7 +19,7 @@ export default class Pie extends Vue {
   })
   readonly options: object | undefined;
 
-  mounted() {
+  mounted(): void {
     this.createChart({
       datasets: [
         {
@@ -31,7 +31,7 @@ export default class Pie extends Vue {
     });
   }
 
-  createChart(chartData: object) {
+  createChart(chartData: object): void {
     const canvas = document.getElementById("pie") as HTMLCanvasElement;
     const options = {
       type: "pie",
