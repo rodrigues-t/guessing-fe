@@ -33,7 +33,7 @@
 import GameResult from "@/modules/game/models/GameResult";
 import ResultService from "@/modules/game/services/ResultService";
 import PageLoad from "@/modules/game/components/PageLoad.vue";
-import { Vue, Component, Watch } from "vue-property-decorator";
+import { Vue, Component } from "vue-property-decorator";
 
 @Component({
   components: {
