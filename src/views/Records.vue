@@ -3,7 +3,7 @@
     <page-load v-if="isLoading" />
     <div v-else>
       <!-- Chart -->
-      <b-row v-if="results">
+      <b-row v-if="containsResult">
         <b-col cols="12" lg="4" offset-lg="4" class="text-center">
           <span>Top 10 chart</span>
           <results-chart :results="topResults" />
@@ -74,6 +74,11 @@ export default class Records extends Vue {
     { key: "created_at", sortable: true },
     { key: "score", sortable: true },
   ];
+
+  get containsResult(): boolean {
+    if(!this.results) return false;
+    return this.results.length > 0;
+  }
 
   get topResults(): Array<GameResult> | null{
     if(this.results === null) return null;
