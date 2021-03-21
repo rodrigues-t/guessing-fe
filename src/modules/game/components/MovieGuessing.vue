@@ -2,8 +2,15 @@
   <div class="d-flex flex-column text-center mt-2">
     <span class="title mb-2">{{ movie.title }}</span>
     <b-row>
-      <b-col cols="12" md="4" offset-md="4"  xl="2" offset-xl="5">
+      <b-col cols="12" md="4" offset-md="4" xl="2" offset-xl="5">
         <b-img-lazy rounded fluid :src="movie.poster" />
+      </b-col>
+    </b-row>
+    <b-row class="mt-1">
+      <b-col cols="12" md="8" offset-md="2">
+        <b-card body-class="p-0">
+          <span><small>{{movie.plot}}</small></span>
+        </b-card>
       </b-col>
     </b-row>
     <b-row class="mt-3">
@@ -32,7 +39,9 @@
                 {{ v.errors[0] }}
               </b-form-invalid-feedback>
             </ValidationProvider>
-            <b-button block variant="dark" class="mt-1" @click="guessClick">Guess</b-button>
+            <b-button block variant="dark" class="mt-1" @click="guessClick"
+              >Guess</b-button
+            >
           </b-form>
         </ValidationObserver>
       </b-col>
@@ -63,7 +72,7 @@ export default class MovieGuessing extends Vue {
 
   public rate = 5;
 
-  @Emit('user-guess-event')
+  @Emit("user-guess-event")
   userGuess(): number {
     return this.rate;
   }
